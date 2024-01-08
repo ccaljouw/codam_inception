@@ -1,0 +1,73 @@
+version: "3.5" #check version
+
+services:
+
+  mariadb:
+    image: mariadb:latest #for testing
+    # build: ./requirements/mariabd --name mariadb
+    container_name: mariadb
+    restart: unless-stopped # or allways
+    env_file: 
+      - .env
+    environment:
+      -  MYSQL_DATABASE=wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - inception
+  
+  wordpress:
+    image: wordpress:latest #for testing
+    # build: ./requirements/wordpress --name wordpress
+    container_name: wordpress
+    restart: unless-stopped 
+    env_file: 
+      - .env
+    environment:
+      - DB_NAME=mariadb
+      - DB_USER=$MYSQL_USER
+      - DB_PASSWORD=$MYSQL_PASSWORD
+      - DB_HOST=mariadb:3306
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+
+  nginx:
+    depends_on:
+      - wordpress
+    image: nginx:1.23 #for testing
+    # build: ./requirements/nginx --name nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./requirements/nginx/conf:/etc/nginx/conf.d
+      # - certbot-etc:/etc/letsencrypt
+    networks:
+      - inception
+
+volumes: #how to define default path
+  wordpress_data:
+    driver: local
+    driver_opts:
+      # device: /Users/ccaljouw/Desktop/inception/srcs/wordpress/data
+      device: /Users/cariencaljouw/Documents/codamcore/inception/srcs/wordpress/data
+      o: bind
+      type: none
+
+  db_data:  
+    driver: local
+    driver_opts:
+      # device: /Users/ccaljouw/Desktop/inception/srcs/mariadb/data
+      device: /Users/cariencaljouw/Documents/codamcore/inception/srcs/mariadb/data
+      o: bind
+      type: none
+
+networks:
+  inception:
+    driver: bridge
+    
+# consider using secrets for passwords: https://docs.docker.com/compose/use-secrets/
