@@ -3,8 +3,6 @@ services:
   nginx:
     depends_on:
       - wordpress
-    image: nginx
-    # user: www-data:www-data
     build: ./requirements/nginx
     container_name: nginx
     restart: unless-stopped
@@ -17,8 +15,8 @@ services:
       - inception
 
   wordpress:
-    image: wordpress
-    # user: www-data:www-data
+    depends_on:
+      - mariadb
     build: ./requirements/wordpress
     container_name: wordpress
     restart: unless-stopped 
@@ -30,7 +28,6 @@ services:
       - inception
   
   mariadb:
-    image: mariadb
     build: ./requirements/mariadb
     container_name: mariadb
     restart: unless-stopped # or allways
@@ -59,10 +56,10 @@ volumes:
       type: none
 
   nginx_config:
+  # remove driver and driver_opts for production?
     driver: local
     driver_opts:
       device: ./requirements/nginx/conf
-
       o: bind
       type: none
 

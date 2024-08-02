@@ -5,3 +5,15 @@ https://developer.wordpress.org/advanced-administration/before-install/howto-ins
 
 
 https://medium.com/@afatir.ahmedfatir/unveiling-42-the-network-inception-a-dive-into-docker-and-docker-compose-cfda98d9f4ac
+
+Tini is a small, lightweight process supervisor and init system designed to handle process management and signal forwarding in Docker containers. Here’s a breakdown of its main functions:
+
+  Signal Handling: When a container receives Unix signals (like SIGTERM for termination), tini ensures that these signals are properly forwarded to the main process running in the container. This helps in cleanly shutting down the application or service and ensures that any necessary cleanup is performed.
+  Reaping Zombie Processes: tini handles the reaping of zombie processes. In Unix-like operating systems, when a child process terminates, it becomes a "zombie" until its parent process acknowledges its exit status. If the parent process does not handle this, it can lead to zombie processes accumulating. tini helps in reaping these zombies, avoiding potential resource leaks.
+  Child Process Reaping: tini ensures that if the main process exits, it will also clean up any child processes that were created, preventing orphaned processes from continuing to run.
+  Minimal Overhead: tini is very lightweight and does not add significant overhead to the container. It is designed to be a minimalistic solution for process management in containerized environments.
+  In a Docker container, the main process is typically started by a script or command specified in the CMD or ENTRYPOINT instructions of the Dockerfile. tini is used as the ENTRYPOINT to ensure that it properly handles signals and process management, especially when the main process is a long-running application or service.
+  
+  In this setup:
+    tini becomes the PID 1 process in the container, making it responsible for signal handling and reaping zombies.
+    The -- argument tells tini to pass all subsequent arguments to the command specified in CMD, which in this case would be your main application or script.  

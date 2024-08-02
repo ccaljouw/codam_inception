@@ -1,10 +1,11 @@
-FROM alpine:3.16
+FROM debian:bullseye-slim
 
 # Install Nginx
 # By default, apk add downloads the package index before installing packages. 
 # Using --no-cache, apk will not store the downloaded index files, 
 # preventing unnecessary cache from being saved in the Docker image.
-RUN apk add --no-cache \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
   nginx \
   openssl \
   tini
@@ -30,7 +31,7 @@ EXPOSE 443
 
 # manage PID 1 responsibilities
 # Use Tini as the entry point to manage the application process and reap zombies
-# ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
 # Command to run Nginx in the foreground 
 # By default, Nginx runs as a daemon, which means it starts, forks a new process, 
