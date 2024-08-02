@@ -17,3 +17,10 @@ Tini is a small, lightweight process supervisor and init system designed to hand
   In this setup:
     tini becomes the PID 1 process in the container, making it responsible for signal handling and reaping zombies.
     The -- argument tells tini to pass all subsequent arguments to the command specified in CMD, which in this case would be your main application or script.  
+
+
+Commands to check db:
+docker exec -it mariadb sh
+mariadb --user=$MARIADB_USER --password=$MARIADB_PASSWORD $MARIADB_NAME
+SHOW TABLES FROM inception_db;
+select * from inception_db.wp_users;
