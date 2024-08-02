@@ -3,7 +3,7 @@ COLOR_GREEN=\033[32m
 COLOR_RED=\033[31m
 COLOR_BLUE=\033[34m
 
-# Function to print messages in color
+# Function to print in color
 define color_output
   @output=`$(1) 2>&1`; \
   if [ $$? -eq 0 ]; then \
@@ -45,7 +45,8 @@ clean: down
 	$(call color_output, rm -rf ./srcs/requirements/wordpress/files)
 
 fclean: clean
-	@echo -e "$(COLOR_BLUE) **** NGINX ****$(COLOR_RESET)"	
+	@echo -e "$(COLOR_BLUE) **** NGINX ****$(COLOR_RESET)"
+	@$(call color_output, docker volume rm -f srcs_nginx_config)
 	@$(call color_output, docker rmi srcs-nginx)
 	@echo -e "$(COLOR_BLUE) **** MARIADB ****$(COLOR_RESET)"	
 	@$(call color_output, docker volume rm -f srcs_db_data)

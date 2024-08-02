@@ -38,9 +38,9 @@ services:
     networks:
       - inception
 
+# TODO: remove driver and driver_opts for evaluation?
 volumes:
   wordpress_files:
-  # remove driver and driver_opts for production?
     driver: local
     driver_opts:
       device: ./requirements/wordpress/files
@@ -48,7 +48,6 @@ volumes:
       type: none
 
   db_data:  
-  # remove driver and driver_opts for production?
     driver: local
     driver_opts:
       device: ./requirements/mariadb/data
@@ -56,7 +55,6 @@ volumes:
       type: none
 
   nginx_config:
-  # remove driver and driver_opts for production?
     driver: local
     driver_opts:
       device: ./requirements/nginx/conf
@@ -66,5 +64,3 @@ volumes:
 networks:
   inception:
     driver: bridge
-    
-# consider using secrets for passwords: https://docs.docker.com/compose/use-secrets/

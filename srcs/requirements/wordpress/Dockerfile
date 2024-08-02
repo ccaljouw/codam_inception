@@ -14,5 +14,9 @@ RUN apt-get install -y \
 COPY ./conf/setup-wordpress.sh /setup-wordpress.sh
 RUN chmod +x ./setup-wordpress.sh
 
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+  CMD pgrep -f 'php-fpm' || exit 1
+
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["./setup-wordpress.sh"]

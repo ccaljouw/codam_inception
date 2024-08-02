@@ -8,13 +8,12 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y \
   nginx \
   openssl \
+  curl \
   tini
 
 # Create necessary directories
 #TODO: set non root user
-RUN mkdir -p /etc/nginx/ssl /var/www/wordpress 
-# \
-  # && chown -R www-data:www-data /var/www/wordpress
+RUN mkdir -p /etc/nginx/ssl
 
 # # Generate a self-signed SSL certificate
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -out /etc/nginx/ssl/myinception.crt -keyout \
@@ -25,9 +24,6 @@ COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
 # Expose port
 EXPOSE 443
-
-# # # Switch to non-root user
-# USER www-data
 
 # manage PID 1 responsibilities
 # Use Tini as the entry point to manage the application process and reap zombies
