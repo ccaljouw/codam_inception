@@ -1,2 +1,7 @@
 1. Create virtual machine with debian
-2. install Docker Engine (docs.docker.com/engine/install/debian)
+2. Install Docker Engine (docs.docker.com/engine/install/debian)
+3. Install wordpress
+https://developer.wordpress.org/advanced-administration/before-install/howto-install/
+
+
+https://medium.com/@afatir.ahmedfatir/unveiling-42-the-network-inception-a-dive-into-docker-and-docker-compose-cfda98d9f4ac

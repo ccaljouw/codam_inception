@@ -1,52 +1,41 @@
-version: "3.5" #check version
-
 services:
 
   nginx:
     depends_on:
       - wordpress
-    # build: ./requirements/nginx --name nginx
-    image: nginx:latest #for testing
+    image: nginx
+    # user: www-data:www-data
+    build: ./requirements/nginx
     container_name: nginx
     restart: unless-stopped
     ports:
       - "443:443"
-      - "8080:8080"
-    # environment:
-    #   - NGINX_PORT=443
     volumes:
-      - wordpress_files:/var/www/html
+      - wordpress_files:/var/www/wordpress
       - nginx_config:/etc/nginx/conf.d
     networks:
       - inception
 
   wordpress:
-    image: wordpress:php8.3-fpm #for testing
-    # build: ./requirements/wordpress --name wordpress
+    image: wordpress
+    # user: www-data:www-data
+    build: ./requirements/wordpress
     container_name: wordpress
     restart: unless-stopped 
     env_file: 
       - .env
-    environment:
-      - WORDPRESS_DB_NAME=wordpress
-      - WORDPRESS_DB_USER=$MYSQL_USER
-      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-      - WORDPRESS_DB_HOST=mariadb:3306
-
     volumes:
-      - wordpress_files:/var/www/html
+      - wordpress_files:/var/www/wordpress
     networks:
       - inception
   
   mariadb:
-    image: mariadb:latest #for testing
-    # build: ./requirements/mariabd --name mariadb
+    image: mariadb
+    build: ./requirements/mariadb
     container_name: mariadb
     restart: unless-stopped # or allways
     env_file:
       - .env
-    environment:
-      -  MYSQL_DATABASE=wordpress
     volumes:
       - db_data:/var/lib/mysql
     networks:

@@ -1,10 +1,12 @@
-FROM alpine:3.18.5
+FROM debian:bookworm-slim
 
+# Install packages
 
-RUN apt update -y 
-RUN apt install php-fpm php-mysql -y
-RUN apt install curl -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y curl php php8.2-fpm php-mysql mariadb-client
 
-COPY ./tools/installWP.sh /
+# Copy startup script
+COPY ./conf/setup-wordpress.sh /setup-wordpress.sh
+RUN chmod +x ./setup-wordpress.sh
 
-CMD [ "/installWP.sh" ]
+ENTRYPOINT ["./setup-wordpress.sh"]

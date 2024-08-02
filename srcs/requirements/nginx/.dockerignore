@@ -1,6 +1,7 @@
 .env
 .git
-docker-compose.yml
-.dockerignore
 .DS_Store
+.dockerignore
+docker-compose.yml
+Dockerfile
 /log
